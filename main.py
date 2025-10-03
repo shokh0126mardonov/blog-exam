@@ -8,18 +8,55 @@ def init_db():
 
 def load_demo_data():
     db = SessionLocal()
-    with open("demo_data.json", "r") as f:
+    with open("demo_data.json", "r",encoding="utf-8") as f:
         data = json.load(f)
 
+
     # Users larni kriting
+
+    users = data['users']
+
+    user_data = []
+    for item in users:
+        user = User(
+            username = item['username'],
+            email = item['email']
+        )
+        user_data.append(user)
+
+    
+    db.bulk_save_objects(user_data)
     db.commit()
 
     # Posts larni kriting
+    posts = data['posts']
+    post_data = []
+
+    for item in posts:
+        post = Post(
+            title = item['title'],
+            body = item['body'],
+            user_id = item['user_id']
+        )
+
+        post_data.append(post)
+    db.bulk_save_objects(post_data)
     db.commit()
 
     # Comments larni kriting
-    db.commit()
+    comments = data['comments']
 
+    comment_data = []
+    for item in comments:
+        comment = Comment(
+            text = item['text'],
+            user_id = item['user_id'],
+            post_id = item['post_id']
+        )
+        comment_data.append(comment)
+
+    db.bulk_save_objects(comment_data)
+    db.commit()
     db.close()
 
 if __name__ == "__main__":

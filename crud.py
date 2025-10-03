@@ -1,18 +1,56 @@
 from sqlalchemy.orm import Session
 from models import User, Post, Comment
 
+
 # CRUD
 def create_user(db: Session, username: str, email: str):
-    pass
+    new_user = User(
+        username = username,
+        email = email
+    )
+
+    db.add(new_user)
+    db.commit()
+
+    return new_user
 
 def create_post(db: Session, user_id: int, title: str, body: str):
-    pass
+    new_post = Post(
+        user_id = user_id,
+        title = title,
+        body = body
+    )
+
+    db.add(new_post)
+    db.commit()
+
+    return new_post
 
 def create_comment(db: Session, user_id: int, post_id: int, text: str):
-    pass
+    new_comment = Comment(
+        user_id = user_id,
+        post_id = post_id,
+        text = text
+    )
+    db.add(new_comment)
+    db.commit()
+
+    return new_comment
 
 def update_post(db: Session, post_id: int, title: str, body: str):
-    pass
+    post = db.query(Post).filter(Post.post_id == post_id).first()
+
+    if post:
+        post.title = title,
+        post.body = body
+
+        db.commit()
+        db.refresh(post)
+
+        return post
+
+    else:
+        raise ValueError("Bunday post mavjud emas?")
 
 def delete_post(db: Session, post_id: int):
     pass
