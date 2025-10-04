@@ -53,15 +53,31 @@ def update_post(db: Session, post_id: int, title: str, body: str):
         raise ValueError("Bunday post mavjud emas?")
 
 def delete_post(db: Session, post_id: int):
-    pass
+    post = db.query(Post).filter(Post.post_id == post_id).first()
 
+    if post:
+        db.delete(post)
+        db.commit()
+    else:
+        raise ValueError('Bunday id dagi post mavjud emas!')
+    
 
 # Queries
 def get_user_posts(db: Session, user_id: int):
-    pass
+    post = db.query(Post).filter(Post.user_id == user_id)
+
+    if post:
+        return post
+    else:
+        raise ValueError('Bunday id dagi post yoq')
 
 def get_post_comment_count(db: Session, post_id: int):
-    pass
+    post = db.query(Post).filter(Post.id == post_id)
+
+    if post:
+        return(len(post.comments))
+    else:
+        raise ValueError('bu postda comment mavjud emas!')
 
 def get_latest_posts(db: Session, limit: int = 5):
     pass
